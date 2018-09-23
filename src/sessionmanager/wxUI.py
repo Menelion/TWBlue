@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import wx
-from multiplatform_widgets import widgets
 import application
+from multiplatform_widgets import widgets
 
 class sessionManagerWindow(wx.Dialog):
  def __init__(self):

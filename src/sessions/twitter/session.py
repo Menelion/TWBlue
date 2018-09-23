@@ -104,6 +104,7 @@ class Session(base.baseSession):
   self.reconnection_function_active = False
   self.counter = 0
   self.lists = []
+  self.configspec_file = "twitter.defaults"
 
 # @_require_configuration
  def login(self, verify_credentials=True):

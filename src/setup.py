@@ -46,7 +46,7 @@ def get_data():
 	import sound_lib
 	import enchant
 	return [
-  ("", ["conf.defaults", "app-configuration.defaults", "icon.ico"]),
+  ("", ["twitter.defaults", "app-configuration.defaults", "icon.ico"]),
     ("", [certs.where()]),
   ("accessible_output2/lib", glob("accessible_output2/lib/*.dll")),
   ("keys/lib", glob("keys/lib/*.dll")),
