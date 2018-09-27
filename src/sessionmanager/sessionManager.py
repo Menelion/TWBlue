@@ -14,6 +14,7 @@ import os
 import logging
 import sessions
 from sessions.twitter import session
+from sessions import base
 import manager
 import config_utils
 import config
@@ -44,9 +45,8 @@ class sessionManagerController(object):
   for i in os.listdir(paths.config_path()):
    if os.path.isdir(paths.config_path(i)) and i not in reserved_dirs:
     log.debug("Adding session %s" % (i,))
-    strconfig = "%s/session.conf" % (paths.config_path(i))
-    config_test = config_utils.load_config(strconfig)
-    if len(config_test) == 0:
+    session_name = base.load_config(i)
+    if session_name == False:
      try:
       log.debug("Deleting session %s" % (i,))
       shutil.rmtree(paths.config_path(i))
@@ -55,17 +55,8 @@ class sessionManagerController(object):
       output.speak("An exception was raised while attempting to clean malformed session data. See the error log for details. If this message persists, contact the developers.",True)
       os.exception("Exception thrown while removing malformed session")
       continue
-    name = config_test["twitter"]["user_name"]
-    if config_test["twitter"]["user_key"] != "" and config_test["twitter"]["user_secret"] != "":
-     sessionsList.append(name)
-     self.sessions.append(i)
-    else:
-     try:
-      log.debug("Deleting session %s" % (i,))
-      shutil.rmtree(paths.config_path(i))
-     except:
-      output.speak("An exception was raised while attempting to clean malformed session data. See the error log for details. If this message persists, contact the developers.",True)
-      os.exception("Exception thrown while removing malformed session")
+    sessionsList.append(session_name)
+    self.sessions.append(i)
   self.view.fill_list(sessionsList)
 
  def show(self):
