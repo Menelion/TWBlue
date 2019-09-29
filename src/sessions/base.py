@@ -17,6 +17,18 @@ import os
 from . import session_exceptions as Exceptions
 log = logging.getLogger("sessionmanager.session")
 
+def load_config(i):
+  strconfig = "%s/session.conf" % (paths.config_path(i))
+  config_test = config_utils.load_config(strconfig)
+  if len(config_test) == 0:
+   return False
+  if config_test.has_key("twitter"):
+   name = config_test["twitter"]["user_name"]
+   if config_test["twitter"]["user_key"] != "" and config_test["twitter"]["user_secret"] != "":
+    return name
+   else:
+    return False
+
 class baseSession(object):
 	""" toDo: Decorators does not seem to be working when using them in an inherited class."""
 
@@ -48,7 +60,8 @@ class baseSession(object):
 		self.logged = False
 		self.settings = None
 		self.db={}
-  
+		self.configspec_file = None
+
 	@property
 	def is_logged(self):
 		return self.logged
@@ -57,7 +70,7 @@ class baseSession(object):
 		""" Get settings for a session."""
 		file_ = "%s/session.conf" % (self.session_id,)
 		log.debug("Creating config file %s" % (file_,))
-		self.settings = config_utils.load_config(os.path.join(paths.config_path(), file_), os.path.join(paths.app_path(), "Conf.defaults"))
+		self.settings = config_utils.load_config(paths.config_path(file_), paths.app_path(self.configspec_file))
 		self.init_sound()
 		self.deshelve()
 
